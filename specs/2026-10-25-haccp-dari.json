@@ -1,37 +1,212 @@
 {
-  "topic": "HACCP",
+  "topic": "HACCP – simple introduction",
   "language": "dari",
   "conveyor": "jar",
   "music": true,
   "music_seed": 2,
-  "hook": {"big": "HACCP", "line": "چیست؟", "pill": "در ۳۰ ثانیه",
-           "sub": ["What is HACCP?", "Explained in 30 seconds"]},
-  "define": {"art": "factory",
-             "title": ["HACCP یک سیستم", "مصئونیت غذایی است"],
-             "body": ["که خطرات را پیش از رسیدن غذا", "به مشتری شناسایی و کنترول می‌کند."],
-             "sub": ["A food safety system that finds and controls", "hazards before food reaches your customer."]},
-  "cards": {"title": "۳ نوع خطر در غذا",
-            "items": [["بیولوژیکی", "باکتری و ویروس", "Biological", "bacteria"],
-                      ["کیمیاوی", "مواد پاک‌کاری و ادویه ضد آفات", "Chemical", "flask"],
-                      ["فزیکی", "شیشه، فلز و سنگ", "Physical", "nut"]],
-            "sub": ["3 types of food hazards:", "biological, chemical, physical"]},
-  "hygiene": {"title": "حفظ‌الصحه کارمندان، اساس مصئونیت غذایی",
-              "items": [["کلاه مو", "Hairnet"], ["ماسک", "Face mask"], ["دستکش", "Gloves"],
-                        ["لباس کار پاک", "Clean uniform"], ["شستن دست‌ها", "Handwashing"]],
-              "sub": ["Staff hygiene is the foundation of food safety"]},
-  "steps": {"title": "۷ اصل HACCP",
-            "items": [["تحلیل خطرات", "Hazard analysis"],
-                      ["تعیین نقاط کنترول حیاتی (CCP)", "CCPs"],
-                      ["تعیین حدود حیاتی", "Critical limits"],
-                      ["نظارت", "Monitoring"],
-                      ["اقدامات اصلاحی", "Corrective actions"],
-                      ["تصدیق سیستم", "Verification"],
-                      ["ثبت اسناد و ریکارد", "Records"]],
-            "sub": ["The 7 principles of HACCP"]},
-  "benefits": {"title": "چرا مهم است؟",
-               "items": ["اعتماد بیشتر مشتریان", "دسترسی به بازارهای صادراتی", "رعایت مقررات مصئونیت غذایی"],
-               "sub": ["Why it matters: customer trust,", "export markets and food safety rules"]},
-  "cta": {"title": ["کلمه «HACCP» را", "کامنت کنید"],
-          "body": ["تا چک‌لیست رایگان", "را برایتان بفرستیم"],
-          "sub": ["Comment HACCP and we'll send you", "a free checklist"]}
+  "scenes": [
+    {
+      "type": "hook",
+      "big": "HACCP",
+      "line": "چیست؟",
+      "pill": "معرفی ساده",
+      "sub": [
+        "What is HACCP?",
+        "A simple introduction"
+      ]
+    },
+    {
+      "type": "define",
+      "art": "factory",
+      "dur": 5.5,
+      "title": [
+        "HACCP یعنی تحلیل خطرات",
+        "و نقاط کنترول حیاتی"
+      ],
+      "body": [
+        "سیستمی برای جلوگیری از خطرات غذایی",
+        "پیش از آنکه غذا به مصرف‌کننده برسد"
+      ],
+      "sub": [
+        "HACCP = Hazard Analysis and",
+        "Critical Control Points"
+      ]
+    },
+    {
+      "type": "cards",
+      "dur": 6.5,
+      "title": "آیا HACCP بین‌المللی است؟ بلی",
+      "items": [
+        [
+          "کودکس (Codex)",
+          "تعیین‌شده توسط FAO و WHO",
+          "Codex FAO/WHO",
+          "globe"
+        ],
+        [
+          "در سراسر جهان",
+          "در بسیاری کشورها الزامی",
+          "Worldwide",
+          "shield"
+        ],
+        [
+          "پایه استندردها",
+          "ISO 22000، FSSC، BRCGS",
+          "The foundation",
+          "doc"
+        ]
+      ],
+      "sub": [
+        "Yes. Its principles are set by Codex (FAO/WHO)",
+        "and recognised worldwide"
+      ]
+    },
+    {
+      "type": "cards",
+      "dur": 6.0,
+      "title": "چه کسانی از HACCP استفاده می‌کنند؟",
+      "items": [
+        [
+          "فابریکه‌های مواد غذایی",
+          "تولید، پروسس و بسته‌بندی",
+          "Food factories",
+          "factory"
+        ],
+        [
+          "رستورانت‌ها و هوتل‌ها",
+          "آشپزخانه‌ها و تهیه غذا",
+          "Restaurants",
+          "pot"
+        ],
+        [
+          "صادرکنندگان",
+          "زعفران، میوه خشک و مغزیجات",
+          "Exporters",
+          "box"
+        ]
+      ],
+      "sub": [
+        "Who uses HACCP: food factories,",
+        "restaurants, hotels and exporters"
+      ]
+    },
+    {
+      "type": "benefits",
+      "dur": 5.5,
+      "title": "چرا شرکت شما به آن نیاز دارد؟",
+      "items": [
+        "غذای مصئون برای مصرف‌کنندگان",
+        "شرط ورود به بازارهای صادراتی",
+        "اعتماد خریداران و رعایت مقررات"
+      ],
+      "sub": [
+        "Why you need it: safe food, access to export",
+        "markets, buyer trust and legal compliance"
+      ]
+    },
+    {
+      "type": "cards",
+      "dur": 6.0,
+      "title": "۳ نوع خطر در غذا",
+      "items": [
+        [
+          "بیولوژیکی",
+          "باکتری و ویروس",
+          "Biological",
+          "bacteria"
+        ],
+        [
+          "کیمیاوی",
+          "مواد پاک‌کاری و ادویه ضد آفات",
+          "Chemical",
+          "flask"
+        ],
+        [
+          "فزیکی",
+          "شیشه، فلز و سنگ",
+          "Physical",
+          "nut"
+        ]
+      ],
+      "sub": [
+        "HACCP controls 3 types of hazards:",
+        "biological, chemical and physical"
+      ]
+    },
+    {
+      "type": "hygiene",
+      "title": "حفظ‌الصحه کارمندان، اساس مصئونیت غذایی",
+      "items": [
+        [
+          "کلاه مو",
+          "Hairnet"
+        ],
+        [
+          "ماسک",
+          "Face mask"
+        ],
+        [
+          "دستکش",
+          "Gloves"
+        ],
+        [
+          "لباس کار پاک",
+          "Clean uniform"
+        ],
+        [
+          "شستن دست‌ها",
+          "Handwashing"
+        ]
+      ],
+      "sub": [
+        "Staff hygiene is the foundation of food safety"
+      ]
+    },
+    {
+      "type": "steps",
+      "title": "کیا چگونه کمک می‌کند؟",
+      "items": [
+        [
+          "ارزیابی خلاها (GAP)",
+          "GAP assessment"
+        ],
+        [
+          "آموزش کارمندان",
+          "Staff training"
+        ],
+        [
+          "ایجاد سیستم و اسناد",
+          "System & documents"
+        ],
+        [
+          "آمادگی و تسهیل تفتیش",
+          "Audit facilitation"
+        ],
+        [
+          "تفتیش نهایی توسط نهاد معتبر",
+          "Certification body",
+          true
+        ]
+      ],
+      "sub": [
+        "KIA: GAP assessment, training, documents",
+        "and audit facilitation"
+      ]
+    },
+    {
+      "type": "cta",
+      "title": [
+        "کلمه «HACCP» را",
+        "کامنت کنید"
+      ],
+      "body": [
+        "تا چک‌لیست رایگان",
+        "را برایتان بفرستیم"
+      ],
+      "sub": [
+        "Comment HACCP and we'll send you",
+        "a free checklist"
+      ]
+    }
+  ]
 }

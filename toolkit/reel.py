@@ -203,7 +203,19 @@ def icon_cap(s=120):
     return img
 
 
-ICONS = {"bacteria": icon_bacteria, "flask": icon_flask, "nut": icon_nut, "factory": icon_factory,
+def icon_pot(s=120):
+    img, d = _canvas(s)
+    d.rounded_rectangle((s*.14, s*.42, s*.86, s*.86), 14, fill=WHITE)
+    d.rectangle((s*.04, s*.48, s*.16, s*.56), fill=WHITE)
+    d.rectangle((s*.84, s*.48, s*.96, s*.56), fill=WHITE)
+    d.rounded_rectangle((s*.1, s*.32, s*.9, s*.42), 6, fill=WHITE)
+    d.rounded_rectangle((s*.42, s*.22, s*.58, s*.32), 4, fill=WHITE)
+    for x in (.34, .5, .66):
+        d.arc((s*(x-.05), s*.04, s*(x+.05), s*.2), 200, 340, fill=WHITE, width=5)
+    return img
+
+
+ICONS = {"pot": icon_pot, "bacteria": icon_bacteria, "flask": icon_flask, "nut": icon_nut, "factory": icon_factory,
          "box": icon_box, "globe": icon_globe, "doc": icon_doc, "cart": icon_cart, "cap": icon_cap,
          "shield": lambda s=120: icon_shield(s)}
 
@@ -250,6 +262,8 @@ def base_frame():
 
 # ---------------------------------------------------------------- scene builders
 def build_scenes(spec):
+    """Scenes come from spec["scenes"] (ordered list of {"type": ...}) or, for older specs,
+    from the fixed keys hook, define, cards, hygiene, steps, benefits, cta."""
     scenes = []  # dicts: s, e, kind, layers, sub
     t = 0.0
 
@@ -259,46 +273,44 @@ def build_scenes(spec):
         scenes.append({"s": s, "e": e, "kind": kind, "layers": layers_fn(s), "sub": subtitle(sub)})
         t = e
 
-    h = spec["hook"]
-    add("hook", 4.2, lambda s: [
-        Layer(fit_text(h["big"], "Black", 230, ORANGE, 960), W/2, 450, s + .1, slide=60),
-        Layer(fit_text(h["line"], "Black", 150, INK, 960), W/2, 720, s + .5),
-        Layer(rounded(560, 110, 55, ORANGE, shadow=False), W/2, 960, s + .9, slide=20),
-        Layer(fit_text(h.get("pill", "در ۳۰ ثانیه"), "Bold", 64, WHITE, 500), W/2, 977, s + 1.0, slide=20),
-    ], h["sub"])
+    def do_hook(h):
+        add("hook", 4.2, lambda s: [
+            Layer(fit_text(h["big"], "Black", 230, ORANGE, 960), W/2, 450, s + .1, slide=60),
+            Layer(fit_text(h["line"], "Black", 150, INK, 960), W/2, 720, s + .5),
+            Layer(rounded(560, 110, 55, ORANGE, shadow=False), W/2, 960, s + .9, slide=20),
+            Layer(fit_text(h.get("pill", "در ۳۰ ثانیه"), "Bold", 64, WHITE, 500), W/2, 977, s + 1.0, slide=20),
+        ], h["sub"])
 
-    d = spec["define"]
-    add("define", 5.0, lambda s: [
-        (Layer(cartoon.art_factory(560), W/2, 270, s + .1) if d.get("art") == "factory"
-         else Layer(icon_shield(300), W/2, 330, s + .1)),
-        Layer(lines_img(d["title"], "Black", 96, INK, gap=10), W/2, 690, s + .4),
-        Layer(lines_img(d["body"], "Medium", 56, GREY, gap=14), W/2, 950, s + 1.0),
-    ], d["sub"])
+    def do_define(d):
+        add("define", d.get("dur", 5.0), lambda s: [
+            (Layer(cartoon.art_factory(560), W/2, 270, s + .1) if d.get("art") == "factory"
+             else Layer(icon_shield(300), W/2, 330, s + .1)),
+            Layer(lines_img(d["title"], "Black", 96, INK, gap=10), W/2, 690, s + .4),
+            Layer(lines_img(d["body"], "Medium", 56, GREY, gap=14), W/2, 950, s + 1.0),
+        ], d["sub"])
 
-    c = spec["cards"]
+    def do_cards(c):
+        def cards_layers(s):
+            L = [Layer(fit_text(c["title"], "Black", 92, INK, 960), W/2, 330, s + .1)]
+            for i, (t1, t2, en, ic) in enumerate(c["items"][:3]):
+                card = rounded(900, 230, 40, WHITE)
+                cw = card.size[0]
+                tile = Image.new("RGBA", (170, 170), (0, 0, 0, 0))
+                ImageDraw.Draw(tile).rounded_rectangle((0, 0, 170, 170), 34, fill=ORANGE)
+                tile.alpha_composite(ICONS.get(ic, icon_doc)(120), (25, 25))
+                card.alpha_composite(tile, (cw - 60 - 170, 60))
+                right = cw - 60 - 170 - 40
+                a = fit_text(t1, "Black", 64, INK, 400)
+                b = fit_text(t2, "Medium", 42, GREY, 400)
+                e_ = fit_text(en, "SemiBold", 34, ORANGE, 190, rtl=False)
+                card.alpha_composite(a, (right - a.size[0], 66))
+                card.alpha_composite(b, (right - b.size[0], 66 + a.size[1]))
+                card.alpha_composite(e_, (70, 145 - e_.size[1] // 2))
+                L.append(Layer(card, W/2, 490 + i * 270, s + .6 + i * .45, slide=60))
+            return L
+        add("cards", c.get("dur", 6.0), cards_layers, c["sub"])
 
-    def cards_layers(s):
-        L = [Layer(fit_text(c["title"], "Black", 92, INK, 960), W/2, 330, s + .1)]
-        for i, (t1, t2, en, ic) in enumerate(c["items"][:3]):
-            card = rounded(900, 230, 40, WHITE)
-            cw = card.size[0]
-            tile = Image.new("RGBA", (170, 170), (0, 0, 0, 0))
-            ImageDraw.Draw(tile).rounded_rectangle((0, 0, 170, 170), 34, fill=ORANGE)
-            tile.alpha_composite(ICONS.get(ic, icon_doc)(120), (25, 25))
-            card.alpha_composite(tile, (cw - 60 - 170, 60))
-            right = cw - 60 - 170 - 40
-            a = fit_text(t1, "Black", 64, INK, 400)
-            b = fit_text(t2, "Medium", 42, GREY, 400)
-            e_ = fit_text(en, "SemiBold", 34, ORANGE, 190, rtl=False)
-            card.alpha_composite(a, (right - a.size[0], 66))
-            card.alpha_composite(b, (right - b.size[0], 66 + a.size[1]))
-            card.alpha_composite(e_, (70, 145 - e_.size[1] // 2))
-            L.append(Layer(card, W/2, 490 + i * 270, s + .6 + i * .45, slide=60))
-        return L
-    add("cards", 6.0, cards_layers, c["sub"])
-
-    hy = spec.get("hygiene")
-    if hy:
+    def do_hygiene(hy):
         def hyg_layers(s):
             L = [Layer(fit_text(hy["title"], "Black", 84, INK, 980), W/2, 300, s + .1)]
             for i, (fa, en) in enumerate(hy["items"][:5]):
@@ -313,59 +325,67 @@ def build_scenes(spec):
             return L
         add("hygiene", max(6.0, 2.4 + 0.65 * len(hy["items"])), hyg_layers, hy["sub"])
 
-    st = spec["steps"]
-    n = len(st["items"])
+    def do_steps(st):
+        n = len(st["items"])
 
-    def steps_layers(s):
-        L = [Layer(fit_text(st["title"], "Black", 92, INK, 960), W/2, 300, s + .1)]
-        y0 = 440 + (7 - n) * 118 // 2
-        for i, item in enumerate(st["items"]):
-            fa, en = item[0], item[1]
-            muted = len(item) > 2 and item[2]
-            row = Image.new("RGBA", (900, 112), (0, 0, 0, 0))
-            ImageDraw.Draw(row).rounded_rectangle((0, 4, 900, 108), 30, fill=(240, 236, 232) if muted else WHITE)
-            badge = num_badge(fa_num(i + 1), 72)
-            if muted:
-                badge = Image.merge("RGBA", (*badge.convert("LA").convert("RGB").split(), badge.getchannel("A")))
-            row.alpha_composite(badge, (900 - 20 - 72, 20))
-            a = fit_text(fa, "Bold", 46, GREY if muted else INK, 520)
-            row.alpha_composite(a, (900 - 20 - 72 - 24 - a.size[0], 56 - a.size[1] // 2))
-            e_ = fit_text(en, "Medium", 28, GREY, 180, rtl=False)
-            row.alpha_composite(e_, (28, 56 - e_.size[1] // 2))
-            L.append(Layer(row, W/2, y0 + i * 118, s + .5 + i * .55, slide=40))
-        return L
-    add("steps", max(5.5, 2.2 + 0.75 * n), steps_layers, st["sub"])
+        def steps_layers(s):
+            L = [Layer(fit_text(st["title"], "Black", 92, INK, 960), W/2, 300, s + .1)]
+            y0 = 440 + (7 - n) * 118 // 2
+            for i, item in enumerate(st["items"]):
+                fa, en = item[0], item[1]
+                muted = len(item) > 2 and item[2]
+                row = Image.new("RGBA", (900, 112), (0, 0, 0, 0))
+                ImageDraw.Draw(row).rounded_rectangle((0, 4, 900, 108), 30, fill=(240, 236, 232) if muted else WHITE)
+                badge = num_badge(fa_num(i + 1), 72)
+                if muted:
+                    badge = Image.merge("RGBA", (*badge.convert("LA").convert("RGB").split(), badge.getchannel("A")))
+                row.alpha_composite(badge, (900 - 20 - 72, 20))
+                a = fit_text(fa, "Bold", 46, GREY if muted else INK, 520)
+                row.alpha_composite(a, (900 - 20 - 72 - 24 - a.size[0], 56 - a.size[1] // 2))
+                e_ = fit_text(en, "Medium", 28, GREY, 180, rtl=False)
+                row.alpha_composite(e_, (28, 56 - e_.size[1] // 2))
+                L.append(Layer(row, W/2, y0 + i * 118, s + .5 + i * .55, slide=40))
+            return L
+        add("steps", max(5.5, 2.2 + 0.75 * n), steps_layers, st["sub"])
 
-    b = spec["benefits"]
+    def do_benefits(b):
+        def ben_layers(s):
+            L = [Layer(fit_text(b["title"], "Black", 100, INK, 960), W/2, 360, s + .1)]
+            for i, bt in enumerate(b["items"][:3]):
+                row = Image.new("RGBA", (900, 150), (0, 0, 0, 0))
+                ImageDraw.Draw(row).rounded_rectangle((0, 0, 900, 150), 40, fill=ORANGE_L)
+                row.alpha_composite(icon_check(84), (900 - 34 - 84, 33))
+                a = fit_text(bt, "Bold", 56, INK, 700)
+                row.alpha_composite(a, (900 - 34 - 84 - 30 - a.size[0], 75 - a.size[1] // 2))
+                L.append(Layer(row, W/2, 600 + i * 190, s + .6 + i * .5, slide=50))
+            return L
+        add("benefits", b.get("dur", 5.0), ben_layers, b["sub"])
 
-    def ben_layers(s):
-        L = [Layer(fit_text(b["title"], "Black", 100, INK, 960), W/2, 360, s + .1)]
-        for i, bt in enumerate(b["items"][:3]):
-            row = Image.new("RGBA", (900, 150), (0, 0, 0, 0))
-            ImageDraw.Draw(row).rounded_rectangle((0, 0, 900, 150), 40, fill=ORANGE_L)
-            row.alpha_composite(icon_check(84), (900 - 34 - 84, 33))
-            a = fit_text(bt, "Bold", 56, INK, 700)
-            row.alpha_composite(a, (900 - 34 - 84 - 30 - a.size[0], 75 - a.size[1] // 2))
-            L.append(Layer(row, W/2, 600 + i * 190, s + .6 + i * .5, slide=50))
-        return L
-    add("benefits", 5.0, ben_layers, b["sub"])
+    def do_cta(ct):
+        def cta_layers(s):
+            card = rounded(900, 450, 44, WHITE)
+            cw = card.size[0]
+            big = logo_scaled(360)
+            a = text_img("شرکت تحقیقاتی و انکشافی کیا", F("Black", 56), INK)
+            c2 = text_img("+93 799 000 579  ·  kia-rd.com", F("Bold", 44), ORANGE, rtl=False)
+            y = 58
+            card.alpha_composite(big, ((cw - big.size[0]) // 2, y)); y += big.size[1] + 14
+            card.alpha_composite(a, ((cw - a.size[0]) // 2, y)); y += a.size[1] + 10
+            card.alpha_composite(c2, ((cw - c2.size[0]) // 2, y))
+            return [Layer(lines_img(ct["title"], "Black", 104, INK, gap=6), W/2, 300, s + .1),
+                    Layer(lines_img(ct["body"], "Medium", 60, GREY, gap=10), W/2, 590, s + .6),
+                    Layer(card, W/2, 780, s + 1.2, slide=60)]
+        add("cta", 5.8, cta_layers, ct["sub"])
 
-    ct = spec["cta"]
-
-    def cta_layers(s):
-        card = rounded(900, 450, 44, WHITE)
-        cw = card.size[0]
-        big = logo_scaled(360)
-        a = text_img("شرکت تحقیقاتی و انکشافی کیا", F("Black", 56), INK)
-        c2 = text_img("+93 799 000 579  ·  kia-rd.com", F("Bold", 44), ORANGE, rtl=False)
-        y = 58
-        card.alpha_composite(big, ((cw - big.size[0]) // 2, y)); y += big.size[1] + 14
-        card.alpha_composite(a, ((cw - a.size[0]) // 2, y)); y += a.size[1] + 10
-        card.alpha_composite(c2, ((cw - c2.size[0]) // 2, y))
-        return [Layer(lines_img(ct["title"], "Black", 104, INK, gap=6), W/2, 300, s + .1),
-                Layer(lines_img(ct["body"], "Medium", 60, GREY, gap=10), W/2, 590, s + .6),
-                Layer(card, W/2, 780, s + 1.2, slide=60)]
-    add("cta", 5.8, cta_layers, ct["sub"])
+    DO = {"hook": do_hook, "define": do_define, "cards": do_cards, "hygiene": do_hygiene,
+          "steps": do_steps, "benefits": do_benefits, "cta": do_cta}
+    if "scenes" in spec:
+        for sc in spec["scenes"]:
+            DO[sc["type"]](sc)
+    else:
+        for key in ("hook", "define", "cards", "hygiene", "steps", "benefits", "cta"):
+            if key in spec:
+                DO[key](spec[key])
     return scenes
 
 
@@ -478,7 +498,9 @@ class Reel:
         a = max(scene_alpha(t, k["hook"]), scene_alpha(t, k["define"]))
         if a > 0:
             draw_conveyor(ov, t, a * ease(t / 0.6), self.product)
-        if self.spec["define"].get("art") != "factory":
+        art = next((x.get("art") for x in self.spec.get("scenes", []) if x["type"] == "define"),
+                   self.spec.get("define", {}).get("art"))
+        if art != "factory":
             a = scene_alpha(t, k["define"]) * ease((t - k["define"]["s"] - .1) / .5)
             if a > 0:
                 draw_ring(ov, t, a, CX, 480)
