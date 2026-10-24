@@ -1,0 +1,138 @@
+{
+  "topic": "BRCGS",
+  "language": "dari",
+  "conveyor": "box",
+  "music": true,
+  "music_seed": 1,
+  "hook": {
+    "big": "BRCGS",
+    "line": "چیست؟",
+    "pill": "در ۳۰ ثانیه",
+    "sub": [
+      "What is BRCGS?",
+      "Explained in 30 seconds"
+    ]
+  },
+  "define": {
+    "title": [
+      "BRCGS یک استندرد",
+      "جهانی ایمنی غذا است"
+    ],
+    "body": [
+      "مورد تأیید GFSI و خواسته‌شده از سوی",
+      "سوپرمارکت‌های بزرگ اروپا و انگلستان"
+    ],
+    "sub": [
+      "A global food safety standard recognised by GFSI",
+      "and required by major UK and European retailers"
+    ],
+    "art": "factory"
+  },
+  "cards": {
+    "title": "چه کسانی به آن نیاز دارند؟",
+    "items": [
+      [
+        "تولیدکنندگان غذا",
+        "فابریکه‌های مواد غذایی",
+        "Food makers",
+        "factory"
+      ],
+      [
+        "بسته‌بندی",
+        "تولیدکنندگان مواد بسته‌بندی",
+        "Packaging",
+        "box"
+      ],
+      [
+        "صادرکنندگان",
+        "زعفران، میوه خشک و مغزیجات",
+        "Exporters",
+        "globe"
+      ]
+    ],
+    "sub": [
+      "Who needs it: food manufacturers,",
+      "packaging producers and exporters"
+    ]
+  },
+  "steps": {
+    "title": "کیا چگونه کمک می‌کند؟",
+    "items": [
+      [
+        "ارزیابی شکاف (GAP)",
+        "GAP assessment"
+      ],
+      [
+        "آموزش کارمندان",
+        "Staff training"
+      ],
+      [
+        "آمادگی و تسهیل ممیزی",
+        "Audit facilitation"
+      ],
+      [
+        "ممیزی نهایی توسط نهاد معتبر",
+        "Certification body",
+        true
+      ]
+    ],
+    "sub": [
+      "KIA does the GAP assessment, training",
+      "and audit facilitation"
+    ]
+  },
+  "benefits": {
+    "title": "چرا BRCGS؟",
+    "items": [
+      "ورود به بازارهای اروپا و انگلستان",
+      "اعتماد خریداران بزرگ",
+      "کاهش رد و برگشت محصولات"
+    ],
+    "sub": [
+      "Why BRCGS: access to UK & EU markets,",
+      "buyer trust and fewer rejected shipments"
+    ]
+  },
+  "cta": {
+    "title": [
+      "کلمه «BRCGS» را",
+      "کامنت کنید"
+    ],
+    "body": [
+      "تا مشاوره رایگان",
+      "برایتان ترتیب دهیم"
+    ],
+    "sub": [
+      "Comment BRCGS for a",
+      "free consultation"
+    ]
+  },
+  "hygiene": {
+    "title": "بهداشت کارمندان، اساس ایمنی غذا",
+    "items": [
+      [
+        "کلاه مو",
+        "Hairnet"
+      ],
+      [
+        "ماسک",
+        "Face mask"
+      ],
+      [
+        "دستکش",
+        "Gloves"
+      ],
+      [
+        "لباس کار پاک",
+        "Clean uniform"
+      ],
+      [
+        "شستن دست‌ها",
+        "Handwashing"
+      ]
+    ],
+    "sub": [
+      "Staff hygiene is the foundation of food safety"
+    ]
+  }
+}
